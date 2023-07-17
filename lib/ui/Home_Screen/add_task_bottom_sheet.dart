@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do/Database/Model/Task.dart';
+import 'package:to_do/Database/my_database.dart';
+import 'package:to_do/Dialogs.dart';
 import 'package:to_do/My_Date_Utils.dart';
+import 'package:to_do/Providers/auth_provider.dart';
 import 'package:to_do/ui/Components/custom_form_field.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
@@ -84,10 +89,25 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     );
   }
 
-  void addTask() {
+  void addTask() async {
     if (formKey.currentState?.validate() == false) {
       return;
     }
+    dialogs.showloadingdialog(context, "Loading...");
+    Task task = Task(
+      title: titleController.text,
+      description: descriptionController.text,
+      dateTime: MyDateUtils.dateonly(selectedDate),
+    );
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    await MyDatabase.addTask(authProvider.currentUser!.id??"", task);
+    dialogs.hidedialog(context);
+    dialogs.showMessage(context, "Task Added Sucessfully",
+      PosActionName: "Ok",
+      PosAction: (){
+      Navigator.pop(context);
+      }
+    );
   }
   var selectedDate = DateTime.now();
   void showTaskDatePicker() async {

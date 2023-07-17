@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do/Database/Model/user.dart' as MyUser;
 import 'package:to_do/Database/my_database.dart';
 import 'package:to_do/Dialogs.dart';
+import 'package:to_do/Providers/auth_provider.dart';
 import 'package:to_do/ui/Components/custom_form_field.dart';
 import 'package:to_do/ui/Home_Screen/home_screen.dart';
 import 'package:to_do/ui/login/Login_Screen.dart';
@@ -140,6 +142,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         email: emailcontroller.text,
       );
       await MyDatabase.addUser(myUser);
+      var authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.updateUser(myUser);
       dialogs.hidedialog(context);
       dialogs.showMessage(context, "User Successfully Registered",dismissable: false,PosActionName: "Ok", PosAction: (){
         Navigator.pushReplacementNamed(context, HomeScreen.routeName);
