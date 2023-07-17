@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do/Database/my_database.dart';
 import 'package:to_do/Dialogs.dart';
+import 'package:to_do/Providers/auth_provider.dart';
 import 'package:to_do/ui/Components/custom_form_field.dart';
 import 'package:to_do/ui/Home_Screen/home_screen.dart';
 import 'package:to_do/ui/register/register_screen.dart';
@@ -111,6 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
         // user is authenticated but not found in the database
         dialogs.showMessage(context, "Can't find user in database",dismissable: false,PosActionName: "Ok");
         }
+      var authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.updateUser(user!);
       dialogs.showMessage(context, "User Successfully Logged in",dismissable: false,PosActionName: "Ok", PosAction: (){
         Navigator.pushReplacementNamed(context, HomeScreen.routeName);
       });

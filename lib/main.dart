@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do/Providers/auth_provider.dart';
 import 'package:to_do/firebase_options.dart';
 import 'package:to_do/ui/Home_Screen/home_screen.dart';
 import 'package:to_do/ui/login/Login_Screen.dart';
@@ -10,7 +13,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => AuthProvider(),
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: FToastBuilder(),
       theme: ThemeData(
         textTheme: TextTheme(
           headlineMedium: TextStyle(
