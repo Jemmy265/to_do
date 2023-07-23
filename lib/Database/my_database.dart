@@ -66,4 +66,10 @@ class MyDatabase {
   static Future<void> deleteTask(String uid, String taskId) async {
     await getTasksCollections(uid).doc(taskId).delete();
   }
+
+  static Future<void> updateTask(String uid, Task task) async {
+    await getTasksCollections(uid).doc(task.id).update(
+        task.toFireStore(),
+    );
+  }
 }
