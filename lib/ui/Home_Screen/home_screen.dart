@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do/Providers/auth_provider.dart';
 import 'package:to_do/ui/Home_Screen/settings/Setting_tab.dart';
 import 'package:to_do/ui/Home_Screen/todos_List/todos_list_tab.dart';
+import 'package:to_do/ui/login/Login_Screen.dart';
 
 import 'add_task_bottom_sheet.dart';
 
@@ -19,6 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("To-Do App"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              logOut();
+              Navigator.pushReplacementNamed(context, LoginScreen.routename);
+            },
+            icon: Icon(Icons.logout),
+          )
+        ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
       floatingActionButton: FloatingActionButton(
@@ -50,11 +62,20 @@ class _HomeScreenState extends State<HomeScreen> {
       body: tabs[selectedIndex],
     );
   }
-  void showAddTaskSheet(){
-    showModalBottomSheet(context: context, builder: (buildcontext){
-      return AddTaskBottomSheet();
-    });
+
+  void showAddTaskSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (buildcontext) {
+          return AddTaskBottomSheet();
+        });
   }
+
+  void logOut() {
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.LogOut();
+  }
+
   var tabs = [
     TodosListTab(),
     SettingsTab(),
